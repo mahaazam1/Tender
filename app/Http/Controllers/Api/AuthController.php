@@ -67,12 +67,13 @@ class AuthController extends Controller
                 Storage::disk('local')->put($path.$nameImage , file_get_contents($image));
                 $user->image = 'users/'.$nameImage;
             }
+            $user->username = substr($request['email'], 0, strpos($request['email'], '@'));
+
             $user->craft_name = $request['craft_name'];
             $user->phone_number = $request['phone_number'];
             $user->save();
 
-            return $this->login($request);
-            
+            return $this->login($request);  
 
         }
         catch(Exception $e){
@@ -89,16 +90,11 @@ class AuthController extends Controller
     }
 
     public function updateProfile(Request $request){
-        $user = User::find($request->id);
+        $user = User::find(Auth::guard('seller-api')->user()->id);
         
-        if(Auth::guard('seller-api')->user()->id != $user->id){
-            return response()->json([
-                'success' => false,
-                'message' => 'unauthorized access'
-            ]);
-        }
         $user->name = $request->name;
         $user->email = $user->email;
+        $user->username = substr($user['email'], 0, strpos($user['email'], '@'));
 
         if($request->hasFile('image')){
             $image = $request->file('image');

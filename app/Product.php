@@ -24,4 +24,8 @@ class Product extends Model
     return $this->belongsTo('App\Category');
    }
 
+   public function cart(){
+    return $this->belongsTo('App\Cart');
+   }
+
 }

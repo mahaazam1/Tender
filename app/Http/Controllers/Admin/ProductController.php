@@ -15,7 +15,7 @@ class ProductController extends Controller
         $users = User::all();
 
         return view('admin.products.index')->with('products',$products)->with('users',$users);
-    }
+    } 
 
     public function destroy($id){
 
@@ -23,14 +23,15 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function update($id){
+    public function approvalProduct($id){
         $product = Product::where("id",$id)->first();
         $product->status = 1;
         $product->update();
 
         return redirect()->back();
 
-    } 
+    }
+
     public function allProducts(){
         $paginate = 6;
         $products = Product::withTrashed()->select('*')->paginate($paginate);

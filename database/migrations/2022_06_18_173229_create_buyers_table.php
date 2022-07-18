@@ -20,7 +20,7 @@ class CreateBuyersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('username');
             $table->string('image')->default('');
-            $table->integer('phone_number');
+            $table->string('phone_number');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

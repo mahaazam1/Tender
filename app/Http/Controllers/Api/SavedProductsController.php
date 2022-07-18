@@ -8,7 +8,7 @@ use App\SavedProducts;
 use Illuminate\Support\Facades\Auth;
 class SavedProductsController extends Controller
 {
-    public function create(Request $request){
+    public function saveProduct(Request $request){
 
         $savedProduct = new SavedProducts;
         $savedProduct->user_id = Auth::guard('seller-api')->user()->id;

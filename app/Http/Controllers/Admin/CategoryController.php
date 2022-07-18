@@ -37,7 +37,7 @@ class CategoryController extends Controller
         $category->name = $name;
         $category->image = 'images/'.$nameImage;
         $result = $category->save();
-        // dd($category);
+    
         return redirect()->back()->with('status',$result);
     }
 

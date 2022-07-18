@@ -14,46 +14,6 @@ use Illuminate\Http\Request;
 */
 Auth::routes();
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::post('login', 'Api\AuthController@login');
-// Route::post('register', 'Api\AuthController@register');
-//Route::get('logout', 'Api\AuthController@logout')->middleware('jwtAuth:user-api');
-
-// Route::post('categories/create', 'Api\CategoryController@create');
-// Route::post('categories/delete', 'Api\CategoryController@delete');
-// Route::get('categories', 'Api\CategoryController@categories')->middleware('admin.auth:admin-api');
-
-
-// Route::post('products/create', 'Api\ProductController@create')->middleware('jwtAuth');
-// Route::post('products/update', 'Api\ProductController@update')->middleware('jwtAuth');
-// Route::post('products/delete', 'Api\ProductController@delete')->middleware('jwtAuth');
-// Route::get('products', 'Api\ProductController@products')->middleware('jwtAuth');
-// Route::get('myProducts', 'Api\ProductController@myProducts')->middleware('jwtAuth');
-
-// Route::post('purchaseCart/create', 'Api\PurchaseCartController@create')->middleware('jwtAuth');
-// Route::post('purchaseCart/update', 'Api\PurchaseCartController@update')->middleware('jwtAuth');
-// Route::post('purchaseCart/delete', 'Api\PurchaseCartController@delete')->middleware('jwtAuth');
-// Route::get('purchaseCart', 'Api\PurchaseCartController@purchaseCart')->middleware('jwtAuth');
-
-// Route::post('user/follow','Api\FollowingController@follow')->middleware('jwtAuth');
-// Route::get('user/following','Api\FollowingController@following')->middleware('jwtAuth');
-// Route::get('user/followers','Api\FollowingController@followers')->middleware('jwtAuth');
-
-/*Route::group(['prefix' => 'admin'],function(){
-    Route::post('login', 'Api\Admin\AuthController@loginAdmin');
-    Route::post('register', 'Api\Admin\AuthController@registerAdmin');
-
-});
-
-Route::group(['prefix' => 'admin', 'middleware' => 'admin.auth:admin-api'],function(){
-    Route::post('categories/create', 'Api\CategoryController@create');
-    Route::post('profie','Api\Admin\AuthController@profileAdmin');
-    Route::post('logout','Api\Admin\AuthController@logoutAdmin');
-});*/
-
 Route::view('error','errors/error')->name('error');
 
 Route::group(['prefix' => 'seller'],function(){
@@ -76,10 +36,12 @@ Route::group(['prefix' => 'seller', 'middleware' => 'admin.auth:seller-api'],fun
     Route::post('products/delete', 'Api\ProductController@delete');
     Route::get('products/searchResult', 'Api\ProductController@searchProduct');
     Route::get('products/lastProducts', 'Api\ProductController@lastProducts');
+    Route::get('productsOffers', 'Api\ProductController@productsOffers');
     Route::get('products', 'Api\ProductController@products');
     Route::get('myProducts', 'Api\ProductController@myProducts');
 
-    Route::post('SavedProducts/create', 'Api\SavedProductsController@create');
+
+    Route::post('SavedProducts/create', 'Api\SavedProductsController@saveProduct');
     Route::post('SavedProducts/delete', 'Api\SavedProductsController@delete');
     Route::get('SavedProducts', 'Api\SavedProductsController@savedProducts');
 
@@ -93,15 +55,18 @@ Route::group(['prefix' => 'seller', 'middleware' => 'admin.auth:seller-api'],fun
     Route::get('order/getOrders', 'Api\SalesCartController@getOrders');
     Route::post('order/orderCompleted', 'Api\SalesCartController@orderCompleted');
 
+    Route::get('searchResult', 'Api\Buyer\SellerController@searchSeller');
+    Route::get('mayLikeSellers', 'Api\Buyer\SellerController@mayLikeSellers');
+    Route::get('newSellers', 'Api\Buyer\SellerController@newSellers');
     Route::get('getSellers', 'Api\Buyer\SellerController@getSellers');
 
 
 
     Route::get('categories', 'Api\CategoryController@categories');
 
-    Route::get('getSellers', 'Api\Buyer\SellerController@getSellers');
 
     Route::post('follow','Api\FollowingController@follow');
+    Route::post('unFollow','Api\FollowingController@unfollow');
     Route::get('following','Api\FollowingController@following');
     Route::get('followers','Api\FollowingController@followers');
 
@@ -123,7 +88,7 @@ Route::group(['prefix' => 'buyer', 'middleware' => 'admin.auth:buyer-api'],funct
     Route::post('address/delete', 'Api\Buyer\AddressController@delete');
     Route::get('myAddress', 'Api\Buyer\AddressController@myAddress');
 
-    Route::post('cart/create', 'Api\Buyer\CartController@create');
+    Route::post('cart/create', 'Api\Buyer\CartController@addToCart');
     Route::post('cart/update', 'Api\Buyer\CartController@update');
     Route::post('cart/delete', 'Api\Buyer\CartController@delete');
     Route::post('cart/buying', 'Api\Buyer\CartController@buying');
@@ -132,20 +97,26 @@ Route::group(['prefix' => 'buyer', 'middleware' => 'admin.auth:buyer-api'],funct
     Route::get('getMyOrder', 'Api\Buyer\CartController@getMyOrder');
 
 
-    Route::post('savedProducts/create', 'Api\Buyer\SavedProductsController@create');
+    Route::post('savedProducts/create', 'Api\Buyer\SavedProductsController@saveProduct');
     Route::post('savedProducts/delete', 'Api\Buyer\SavedProductsController@delete');
     Route::get('savedProducts', 'Api\Buyer\SavedProductsController@savedProducts');
 
     Route::post('follow','Api\FollowingController@follow');
+    Route::post('unFollow','Api\FollowingController@unfollow');
     Route::get('following','Api\FollowingController@following');
 
+    Route::get('searchResult', 'Api\Buyer\SellerController@searchSeller');
+    Route::get('mayLikeSellers', 'Api\Buyer\SellerController@mayLikeSellers');
+    Route::get('newSellers', 'Api\Buyer\SellerController@newSellers');
     Route::get('getSellers', 'Api\Buyer\SellerController@getSellers');
 
     Route::get('categories', 'Api\CategoryController@categories');
 
     Route::get('products/searchResult', 'Api\ProductController@searchProduct');
     Route::get('products/lastProducts', 'Api\ProductController@lastProducts');
+    Route::get('productsOffers', 'Api\ProductController@productsOffers');
     Route::get('products', 'Api\ProductController@products');
+
 
     
     

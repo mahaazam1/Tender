@@ -12,9 +12,9 @@ use App\Buyer;
 class FollowingController extends Controller
 { 
     public function follow(Request $request){
-
         if(Auth::guard('seller-api')->check()){
-            $follow = Following::where('seller_id',$request->seller_id)->where('user_id',Auth::guard('seller-api')->user()->id)->get();
+            $follow = Following::where('seller_id',$request->seller_id)
+            ->where('user_id',Auth::guard('seller-api')->user()->id)->get();
             if(count($follow)>0){
                 $follow[0]->delete();
                 return response()->json([
@@ -26,17 +26,15 @@ class FollowingController extends Controller
             $follow->user_id = Auth::guard('seller-api')->user()->id;
             $follow->seller_id = $request->seller_id;
             $follow->save();
-    
             return response()->json([
                 'status' => true,
                 'message' => 'follow',
                 'follow' => $follow
             ]);
-
         }
         elseif(Auth::guard('buyer-api')->check()){
-
-            $follow = Following::where('seller_id',$request->seller_id)->where('buyer_id',Auth::guard('buyer-api')->user()->id)->get();
+            $follow = Following::where('seller_id',$request->seller_id)
+            ->where('buyer_id',Auth::guard('buyer-api')->user()->id)->get();
             if(count($follow)>0){
                 $follow[0]->delete();
                 return response()->json([
@@ -48,12 +46,36 @@ class FollowingController extends Controller
             $follow->buyer_id = Auth::guard('buyer-api')->user()->id;
             $follow->seller_id = $request->seller_id;
             $follow->save();
-
             return response()->json([
                 'status' => true,
                 'message' => 'follow',
                 'follow' => $follow
             ]);
+        }
+    }
+
+    public function unfollow(Request $request){
+        if(Auth::guard('seller-api')->check()){
+            $follow = Following::where('seller_id',$request->seller_id)
+            ->where('user_id',Auth::guard('seller-api')->user()->id)->get();
+            if(count($follow)>0){
+                $follow[0]->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'unfollow'
+                ]);
+            }
+        }
+        elseif(Auth::guard('buyer-api')->check()){
+            $follow = Following::where('seller_id',$request->seller_id)
+            ->where('buyer_id',Auth::guard('buyer-api')->user()->id)->get();
+            if(count($follow)>0){
+                $follow[0]->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'unfollow'
+                ]);
+            }
         }
     }
 
@@ -111,58 +133,4 @@ class FollowingController extends Controller
         ]);
     }   
 
-
-
-
-    // public function follow(Request $request){
-    //     $follow = Following::where('seller_id',$request->seller_id)->where('user_id',Auth::guard('seller-api')->user()->id)->get();
-    //     //check if it returns 0 then this post is not liked and should be liked else unliked
-    //     if(count($follow)>0){
-    //         //bcz we cant have likes more than one
-    //         $follow[0]->delete();
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'unfollow'
-    //         ]);
-    //     }
-    //     $follow = new Following;
-    //     $follow->user_id = Auth::guard('seller-api')->user()->id;
-    //     $follow->seller_id = $request->seller_id;
-    //     $follow->save();
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'message' => 'follow',
-    //         'follow' => $follow
-    //     ]);
-    // }
-
-    // public function following(Request $request){
-    //     $followings = Following::where('user_id',Auth::guard('seller-api')->user()->id)->get();
-
-
-    //     $users  = [];
-    //     foreach ($followings as $following){
-    //         array_push($users,User::where('id',$following->seller_id)->first());
-    //     }
-
-    //     return response()->json([
-    //         'status' => true,
-    //         'followings' => $users
-    //     ]);
-    // }
-
-    // public function followers(Request $request){
-    //     $followers = Following::where('seller_id',Auth::guard('seller-api')->user()->id)->get();
-        
-    //     $users  = [];
-    //     foreach ($followers as $follower){
-    //         array_push($users,User::where('id',$follower->user_id)->first());
-    //     }
-        
-    //     return response()->json([
-    //         'status' => true,
-    //         'followers' => $users
-    //     ]);
-    // }
 }

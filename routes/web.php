@@ -38,11 +38,7 @@ Route::group(['middleware' => 'auth'],function(){
     Route::get('products/approved','Admin\ProductController@acceptedProducts');
 
     Route::post('products/disapproval/{id}','Admin\ProductController@destroy');
-    Route::post('products/approval/{id}','Admin\ProductController@update');
-
-
-
-
+    Route::post('products/approval/{id}','Admin\ProductController@approvalProduct');
 
     
     });

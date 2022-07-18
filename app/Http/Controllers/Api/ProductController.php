@@ -21,12 +21,6 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->price = $request->price;
 
-        // if($request->hasFile('image')){
-        //     $image = time()+rand(1,1000000) . '.png';
-        //     file_put_contents('storage/products/'.$image,base64_decode($request->image));
-        //     $product->image = $image;
-        // }
-
         if($request->hasFile('image')){
             $image = $request->file('image');
             $path = 'public/products/';
@@ -35,7 +29,6 @@ class ProductController extends Controller
             $product->image = 'products/'.$nameImage;
         }
         $product->save();
-        // $product->user;
         return response()->json([
             'success' => true,
             'message' => 'تم ارسال طلبك بنجاح.. سيتم مراجعته وادراجه',
@@ -99,7 +92,8 @@ class ProductController extends Controller
     }
 
     public function myProducts(){
-        $products = Product::with('category')->where('status',1)->where('user_id',Auth::guard('seller-api')->user()->id)->orderBy('id','desc')->get();
+        $products = Product::with('category')->where('status',1)
+        ->where('user_id',Auth::guard('seller-api')->user()->id)->orderBy('id','desc')->get();
         $user = Auth::user();
         return response()->json([
             'success' => true,
@@ -115,6 +109,15 @@ class ProductController extends Controller
             'success' => true,
             'products' => $products
         ]);
+    } 
+
+    public function productsOffers(){
+        $products = Product::with('category')->where('price','<',10)->get();
+
+        return response()->json([
+            'success' => true,
+            'products' => $products
+        ]);
     }
 
     public function searchProduct(Request $request){
@@ -124,7 +127,7 @@ class ProductController extends Controller
         if($product->isEmpty()){
             return response()->json([
                 'success' => false,
-                'message' => 'المنتج غير متوفر',
+                'message' => 'المنتج غير موجود',
             ]);
         }
 

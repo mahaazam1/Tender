@@ -85,7 +85,7 @@
 							<form method="POST" action="{{URL('products/approval/'.$product->id)}}">
                           	<input type="hidden" name="_token" value="{{csrf_token()}}">
                           <button type="submit" 
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-green-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Edit">
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
@@ -98,7 +98,7 @@
                           	<input type="hidden" name="_token" value="{{csrf_token()}}">
 
                           	<button type="submit" 
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-green-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Delete"
                           >
                             <svg

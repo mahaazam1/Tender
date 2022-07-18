@@ -31,10 +31,7 @@ class AuthController extends Controller
             $buyer->phone_number = $request['phone_number'];
             $buyer->save();
 
-            return response()->json([
-                'success' => true,
-                'buyer' => $buyer
-            ]);
+            return $this->login($request);  
             
 
         }
@@ -63,7 +60,7 @@ class AuthController extends Controller
         return response()->json([
             'success' =>true,
             'token' => $token,
-            'user'  => Auth::guard('buyer-api')->user()
+            'buyer'  => Auth::guard('buyer-api')->user()
         ]);
     }
 
@@ -72,14 +69,8 @@ class AuthController extends Controller
     }
 
     public function updateProfile(Request $request){
-        $buyer = Buyer::find($request->id);
+        $buyer = Buyer::find(Auth::guard('buyer-api')->user()->id);
         
-        if(Auth::guard('buyer-api')->user()->id != $buyer->id){
-            return response()->json([
-                'success' => false,
-                'message' => 'unauthorized access'
-            ]);
-        }
         $buyer->name = $request->name;
         $buyer->email = $buyer->email;
 

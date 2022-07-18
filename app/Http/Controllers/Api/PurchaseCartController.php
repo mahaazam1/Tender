@@ -8,6 +8,7 @@ use App\PurchaseCart;
 use App\SalesCart;
 use App\Address;
 use App\Product;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PurchaseCartController extends Controller
@@ -30,7 +31,6 @@ class PurchaseCartController extends Controller
  
 
         $purchaseCart->save();
-        $purchaseCart->user;
         return response()->json([
             'success' => true,
             'message' => 'تمت اضافة المنتج الى السلة',
@@ -74,54 +74,23 @@ class PurchaseCartController extends Controller
     }
 
     public function purchaseCart(){
-        $purchaseCart = PurchaseCart::where('user_id',Auth::guard('seller-api')->user()->id)->orderBy('id','desc')->get();
+        // $purchaseCart = PurchaseCart::where('user_id',Auth::guard('seller-api')->user()->id)->orderBy('id','desc')->get();
+
+        $purchaseCart = DB::table('purchase_carts')
+        ->join('products','products.id','=','purchase_carts.product_id')
+        ->where('purchase_carts.user_id','=',Auth::guard('seller-api')->user()->id)
+        ->select('products.id','purchase_carts.id','products.name','products.image','products.price','products.description','purchase_carts.quantity')
+        ->get();
+
         $user = Auth::user();
+
         return response()->json([
             'success' => true,
             'product' => $purchaseCart,
-            'user' => $user
         ]);
     }
 
-    // public function buying(){
-    //     $purchaseCarts = PurchaseCart::where('user_id',Auth::guard('seller-api')->user()->id)->get();
-    //     $sales = new SalesCart;
-    //     if(!$purchaseCarts->isEmpty()){
-    //         foreach($purchaseCarts as $purchases){
-    //             $id = Product::where('id',$purchases->product_id)->select('user_id')->first();
-    
-    //             $sales->user_id = Auth::guard('seller-api')->user()->id;
-    //             $sales->product_id = $purchases->product_id;
-    //             $sales->quantity = $purchases->quantity;
-    //             $sales->seller_id = $id['user_id'];
-    //         }
-    //     }
-    //     else{
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'أضف المنتجات التي تريد شرائها السلة',
-    //         ]);
-    //     }
 
-    //     $address = Address::with('user')->where('user_id',Auth::guard('seller-api')->user()->id)->first();
-
-    //     if($address == null){
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => '!اضف عنوانك قبل الطلب'
-    //         ]);
-    //     }
-
-    //     $sales->save();
-    //     PurchaseCart::where('user_id',Auth::guard('seller-api')->user()->id)->delete();
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'تم ارسال طلبك بنجاح',
-    //         'address' => $address,
-    //         'order' => $sales,
-    //     ]);
-    // }
 
     public function buying(){
         $purchaseCarts = PurchaseCart::where('user_id',Auth::guard('seller-api')->user()->id)->get();
@@ -173,12 +142,21 @@ class PurchaseCartController extends Controller
         
         // $sale = SalesCart::with('product')->where('product_id',37)->where('user_id',Auth::guard('seller-api')->user()->id)->get();
 
-        $salesCart = SalesCart::where('user_id',Auth::guard('seller-api')->user()->id)->orderBy('created_at')->get()->groupBy(function($item) {
-            return $item->created_at->format('Y-m-d');
-       });
+    //     $salesCart = SalesCart::where('user_id',Auth::guard('seller-api')->user()->id)
+    //     ->orderBy('created_at')->get()->groupBy(function($item) {
+    //         return $item->created_at->format('Y-m-d');
+    //    });
+
+       $salesCart = DB::table('sales_carts')
+        ->join('products','products.id','=','sales_carts.product_id')
+        ->where('sales_carts.user_id','=',Auth::guard('seller-api')->user()->id)
+        ->select('sales_carts.id','products.id','products.name','products.image','sales_carts.status',DB::raw('DATE(sales_carts.created_at) as date'))
+        ->get()->groupBy('date');
+        
+
         return response()->json([
             'success' => true,
-            'my order' => $salesCart,
+            'my orders' => $salesCart,
         ]);
 
       

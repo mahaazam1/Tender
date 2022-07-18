@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Product;
 use App\SalesCart;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Address;
 use App\BuyerAddress;  
@@ -17,7 +18,7 @@ class SalesCartController extends Controller
 {
     
     public function getOrders(Request $request){
-         $orders = SalesCart::where('seller_id', Auth::guard('seller-api')->user()->id)->get();
+        $orders = SalesCart::where('seller_id', Auth::guard('seller-api')->user()->id)->get();
          $address  = [];
         foreach ($orders as $order) {
 
@@ -28,24 +29,20 @@ class SalesCartController extends Controller
             if($order['buyer_id'] != null){
 
                 array_push($address, BuyerAddress::with('buyer')->where('buyer_id',$order['buyer_id'])->first());
-
             }
-
         }
-        
-/*
-        $orders = DB::table('sales_carts')
-        ->join('users','users.id','=','sales_carts.user_id')
-        ->join('addresses','addresses.user_id','=','users.id')
+
+        $salesCart = DB::table('sales_carts')
+        ->join('products','products.id','=','sales_carts.product_id')
         ->where('sales_carts.seller_id','=',Auth::guard('seller-api')->user()->id)
+        ->select('products.id','products.name','products.description','products.image','sales_carts.status','sales_carts.user_id','sales_carts.buyer_id','sales_carts.quantity')
         ->get();
-*/
-        
+
         return response()->json([
             'success' => true,
-            'message' => 'You have '.count($orders) . ' orders',
-            'order' => $orders,
-            'address' => $address,
+            'message' => 'You have '.count($salesCart) . ' orders',
+            'order' => $salesCart,
+            'address' => array_unique($address),
             
         ]);
     }

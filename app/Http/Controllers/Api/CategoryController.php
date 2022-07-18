@@ -39,6 +39,8 @@ class CategoryController extends Controller
         ]);
     }
 
+
+    
         public function categories(){
         $categories = Category::with('products')->orderBy('id','desc')->get();
 

@@ -26,8 +26,8 @@
                     <tr
                       class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
                     >
-                      <th class="px-4 py-3">Image Category</th>
-                      <th class="px-4 py-3">@lang('dashboard.category.name')</th>
+                      <th class="px-4 py-3">Category image</th>
+                      <th class="px-4 py-3">Category name</th>
                       <th class="px-4 py-3">Actions</th>
                     </tr>
                   </thead>
@@ -65,7 +65,7 @@
 							<form method="" action="{{URL('category/edit/'.$category->id)}}">
                           	<input type="hidden" name="_token" value="{{csrf_token()}}">
                           <button type="submit" 
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-green-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Edit">
 
                             <svg
@@ -84,7 +84,7 @@
                           	<input type="hidden" name="_token" value="{{csrf_token()}}">
 
                           	<button type="submit" 
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-green-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Delete"
                           >
                             <svg
